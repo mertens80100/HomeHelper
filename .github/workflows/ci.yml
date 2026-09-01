@@ -1,0 +1,30 @@
+name: Java CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  compile-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Compile
+        run: |
+          mkdir -p out
+          find src/main/java src/test/java -name "*.java" -print0 | xargs -0 javac -d out
+
+      - name: Run tests
+        run: java -cp out com.yusufkara.homehelper.HomeTaskServiceTest
+
